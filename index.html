@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="寻找一组数字中总和刚好超过目标值的最小组合。" />
+    <title>超额最小组合计算器</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="超额最小组合计算器首页"><span class="brand-mark">+</span><span>MIN&nbsp;OVER</span></a>
+        <span class="version">组合搜索工具 · v1.0</span>
+      </header>
+
+      <section class="intro">
+        <p class="eyebrow">PRECISION SUM FINDER</p>
+        <h1>找到刚刚超过<br /><em>目标值</em>的组合。</h1>
+        <p class="lead">输入可用数字和目标值，计算器会从所有可能的组合中，挑出总和最小且严格大于目标值的一组。</p>
+      </section>
+
+      <section class="workspace" aria-label="组合计算器">
+        <form class="panel input-panel" id="calculator-form">
+          <div class="panel-heading"><span class="step">01</span><div><h2>输入数据</h2><p>每个数字只能被使用一次</p></div></div>
+          <label for="numbers">可用数字</label>
+          <textarea id="numbers" name="numbers" rows="4" placeholder="例如：12, 7.5, 18, 3, 24"></textarea>
+          <p class="hint">使用逗号、空格或换行分隔</p>
+          <label for="target">目标值</label>
+          <div class="target-wrap"><input id="target" name="target" type="number" step="any" placeholder="例如：30" /><span>目标</span></div>
+          <button class="primary-button" type="submit"><span>计算最小超额组合</span><span class="button-arrow">↗</span></button>
+          <p class="error" id="error" role="alert" aria-live="polite"></p>
+        </form>
+
+        <section class="panel result-panel" aria-live="polite">
+          <div class="panel-heading"><span class="step">02</span><div><h2>计算结果</h2><p id="result-caption">等待输入数据</p></div></div>
+          <div id="empty-state" class="empty-state"><div class="empty-icon">∑</div><p>结果会显示在这里</p><span>组合越接近目标值，结果越精准。</span></div>
+          <div id="result-state" class="result-state" hidden>
+            <div class="result-total"><span>最小超额总和</span><strong id="total">—</strong><small id="overage">—</small></div>
+            <div class="result-combo"><div class="combo-label">使用的数字 <span id="count">0 个</span></div><div id="combination" class="chips"></div></div>
+            <div class="result-meta"><div><span>目标值</span><strong id="target-display">—</strong></div><div><span>参与计算</span><strong id="input-count">—</strong></div></div>
+            <button class="secondary-button" id="copy-button" type="button"><span>复制结果</span><span>⧉</span></button>
+          </div>
+        </section>
+      </section>
+
+      <footer><span>支持正数、小数和重复数字</span><span>所有计算均在浏览器本地完成</span></footer>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
