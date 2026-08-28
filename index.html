@@ -29,8 +29,12 @@
           <label for="numbers">可用数字</label>
           <textarea id="numbers" name="numbers" rows="4" placeholder="例如：12, 7.5, 18, 3, 24"></textarea>
           <p class="hint">使用逗号、空格或换行分隔</p>
-          <label for="target">目标值</label>
-          <div class="target-wrap"><input id="target" name="target" type="number" step="any" placeholder="例如：30" /><span>目标</span></div>
+          <label>目标进度</label>
+          <div class="progress-inputs">
+            <div class="target-wrap"><input id="completed" name="completed" type="number" step="any" min="0" value="0" placeholder="0" /><span>已完成</span></div>
+            <div class="target-wrap"><input id="required" name="required" type="number" step="any" min="0" placeholder="例如：94" /><span>总需求</span></div>
+          </div>
+          <p class="hint progress-hint">实际计算目标 = 总需求 − 已完成</p>
           <button class="primary-button" type="submit"><span>计算最小超额组合</span><span class="button-arrow">↗</span></button>
           <p class="error" id="error" role="alert" aria-live="polite"></p>
         </form>
@@ -49,6 +53,12 @@
 
       <footer><span>支持正数、小数和重复数字</span><span>所有计算均在浏览器本地完成</span></footer>
     </main>
+    <style>
+      .progress-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .progress-inputs .target-wrap { margin-bottom: 8px; }
+      .progress-hint { margin-top: 3px; margin-bottom: 23px; }
+      @media (max-width: 420px) { .progress-inputs { grid-template-columns: 1fr; gap: 2px; } }
+    </style>
     <script src="script.js"></script>
   </body>
 </html>

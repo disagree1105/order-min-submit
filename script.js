@@ -1,6 +1,7 @@
 const form = document.querySelector('#calculator-form');
 const numbersInput = document.querySelector('#numbers');
-const targetInput = document.querySelector('#target');
+const completedInput = document.querySelector('#completed');
+const requiredInput = document.querySelector('#required');
 const error = document.querySelector('#error');
 const emptyState = document.querySelector('#empty-state');
 const resultState = document.querySelector('#result-state');
@@ -40,9 +41,13 @@ form.addEventListener('submit', (event) => {
   event.preventDefault();
   error.textContent = '';
   const numbers = parseNumbers(numbersInput.value);
-  const target = Number(targetInput.value);
+  const completed = completedInput.value === '' ? 0 : Number(completedInput.value);
+  const required = Number(requiredInput.value);
   if (!numbers.length) { error.textContent = '请输入至少一个大于 0 的数字。'; return; }
-  if (!Number.isFinite(target)) { error.textContent = '请输入有效的目标值。'; return; }
+  if (!Number.isFinite(completed) || completed < 0) { error.textContent = '已完成数量不能小于 0。'; return; }
+  if (!Number.isFinite(required) || required < 0) { error.textContent = '请输入有效的总需求值。'; return; }
+  const target = required - completed;
+  if (target < 0) { error.textContent = '已完成数量不能大于总需求。'; return; }
   if (numbers.length > 28) { error.textContent = '数字数量最多支持 28 个，请减少输入后再试。'; return; }
   latestResult = findMinimumCombination(numbers, target);
   emptyState.hidden = Boolean(latestResult);
