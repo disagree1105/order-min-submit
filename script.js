@@ -20,24 +20,18 @@ function parseNumbers(value) {
 }
 
 function findMinimumCombination(numbers, target) {
-  const scale = 10000;
-  const values = [...new Set(numbers.map((number) => Math.round(number * scale)))].filter(Boolean);
-  const targetUnits = Math.floor(target * scale);
-  const cap = targetUnits + Math.max(...values);
-  if (cap > 2000000) return null;
-  const sums = new Array(cap + 1).fill(null);
-  sums[0] = [];
-  for (let sum = 0; sum <= cap; sum += 1) {
-    if (sums[sum] === null) continue;
-    for (const value of values) {
-      const next = sum + value;
-      if (next <= cap && sums[next] === null) sums[next] = [...sums[sum], value];
+  let best = null;
+  function search(index, sum, chosen) {
+    if (sum > target && (!best || sum < best.sum || (sum === best.sum && chosen.length < best.values.length))) {
+      best = { sum, values: [...chosen] };
+    }
+    if (index >= numbers.length || (best && sum >= best.sum)) return;
+    for (let i = index; i < numbers.length; i += 1) {
+      search(i + 1, sum + numbers[i], [...chosen, numbers[i]]);
     }
   }
-  for (let sum = Math.max(0, targetUnits + 1); sum <= cap; sum += 1) {
-    if (sums[sum]) return { sum: sum / scale, values: sums[sum].map((value) => value / scale) };
-  }
-  return null;
+  search(0, 0, []);
+  return best;
 }
 
 function formatNumber(value) { return Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''); }
