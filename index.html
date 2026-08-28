@@ -25,7 +25,7 @@
 
       <section class="workspace" aria-label="组合计算器">
         <form class="panel input-panel" id="calculator-form">
-          <div class="panel-heading"><span class="step">01</span><div><h2>输入数据</h2><p>每个数字只能被使用一次</p></div></div>
+          <div class="panel-heading"><span class="step">01</span><div><h2>输入数据</h2><p>每个数字可以重复使用</p></div></div>
           <label for="numbers">可用数字</label>
           <textarea id="numbers" name="numbers" rows="4" placeholder="例如：12, 7.5, 18, 3, 24"></textarea>
           <p class="hint">使用逗号、空格或换行分隔</p>
@@ -41,7 +41,6 @@
 
         <section class="panel result-panel" aria-live="polite">
           <div class="panel-heading"><span class="step">02</span><div><h2>计算结果</h2><p id="result-caption">等待输入数据</p></div></div>
-          <div id="empty-state" class="empty-state"><div class="empty-icon">∑</div><p>结果会显示在这里</p><span>组合越接近目标值，结果越精准。</span></div>
           <div id="result-state" class="result-state" hidden>
             <div class="result-total"><span>最小超额总和</span><strong id="total">—</strong><small id="overage">—</small></div>
             <div class="result-combo"><div class="combo-label">使用的数字 <span id="count">0 个</span></div><div id="combination" class="chips"></div></div>

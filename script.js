@@ -3,7 +3,6 @@ const numbersInput = document.querySelector('#numbers');
 const completedInput = document.querySelector('#completed');
 const requiredInput = document.querySelector('#required');
 const error = document.querySelector('#error');
-const emptyState = document.querySelector('#empty-state');
 const resultState = document.querySelector('#result-state');
 const resultCaption = document.querySelector('#result-caption');
 const total = document.querySelector('#total');
@@ -21,18 +20,24 @@ function parseNumbers(value) {
 }
 
 function findMinimumCombination(numbers, target) {
-  let best = null;
-  function search(index, sum, chosen) {
-    if (sum > target && (!best || sum < best.sum || (sum === best.sum && chosen.length < best.values.length))) {
-      best = { sum, values: [...chosen] };
-    }
-    if (index >= numbers.length || (best && sum >= best.sum)) return;
-    for (let i = index; i < numbers.length; i += 1) {
-      search(i + 1, sum + numbers[i], [...chosen, numbers[i]]);
+  const scale = 10000;
+  const values = [...new Set(numbers.map((number) => Math.round(number * scale)))].filter(Boolean);
+  const targetUnits = Math.floor(target * scale);
+  const cap = targetUnits + Math.max(...values);
+  if (cap > 2000000) return null;
+  const sums = new Array(cap + 1).fill(null);
+  sums[0] = [];
+  for (let sum = 0; sum <= cap; sum += 1) {
+    if (sums[sum] === null) continue;
+    for (const value of values) {
+      const next = sum + value;
+      if (next <= cap && sums[next] === null) sums[next] = [...sums[sum], value];
     }
   }
-  search(0, 0, []);
-  return best;
+  for (let sum = Math.max(0, targetUnits + 1); sum <= cap; sum += 1) {
+    if (sums[sum]) return { sum: sum / scale, values: sums[sum].map((value) => value / scale) };
+  }
+  return null;
 }
 
 function formatNumber(value) { return Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''); }
@@ -50,7 +55,6 @@ form.addEventListener('submit', (event) => {
   if (target < 0) { error.textContent = '已完成数量不能大于总需求。'; return; }
   if (numbers.length > 28) { error.textContent = '数字数量最多支持 28 个，请减少输入后再试。'; return; }
   latestResult = findMinimumCombination(numbers, target);
-  emptyState.hidden = Boolean(latestResult);
   resultState.hidden = !latestResult;
   if (!latestResult) { resultCaption.textContent = '没有找到符合条件的组合'; return; }
   resultCaption.textContent = '已找到最接近目标值的组合';
