@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="寻找一组数字中总和刚好超过目标值的最小组合。" />
-    <title>超额最小组合计算器</title>
+    <title>订单道具最少提交计算器</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -18,9 +18,7 @@
       </header>
 
       <section class="intro">
-        <p class="eyebrow">PRECISION SUM FINDER</p>
-        <h1>找到刚刚超过<br /><em>目标值</em>的组合。</h1>
-        <p class="lead">输入可用数字和目标值，计算器会从所有可能的组合中，挑出总和最小且严格大于目标值的一组。</p>
+        <h1>订单道具最少提交计算器</h1>
       </section>
 
       <section class="workspace" aria-label="组合计算器">
@@ -53,10 +51,11 @@
       <footer><span>支持正数、小数和重复数字</span><span>所有计算均在浏览器本地完成</span></footer>
     </main>
     <style>
+      .intro h1 { font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.03em; }
       .progress-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
       .progress-inputs .target-wrap { margin-bottom: 8px; }
       .progress-hint { margin-top: 3px; margin-bottom: 23px; }
-      @media (max-width: 420px) { .progress-inputs { grid-template-columns: 1fr; gap: 2px; } }
+      @media (max-width: 420px) { .progress-inputs { grid-template-columns: 1fr; gap: 2px; } .intro h1 { font-size: 30px; } }
     </style>
     <script src="script.js"></script>
   </body>
