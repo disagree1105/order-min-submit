@@ -21,11 +21,39 @@ function parseNumbers(value) {
 
 function findMinimumCombination(numbers, target) {
   let best = null;
-  function search(index, sum, chosen) {
-    if (sum > target && (!best || sum < best.sum || (sum === best.sum && chosen.length < best.values.length))) {
-      best = { sum, values: [...chosen] };
+  function consider(candidate) {
+    if (!best) {
+      best = candidate;
+      return;
     }
-    if (index >= numbers.length || (best && sum >= best.sum)) return;
+    // 优先选总和更接近目标（不超过或刚好达到目标）的组合
+    // 如果都超过目标，选超过更少的；如果一个刚好达到目标，优先选它
+    const candidateOver = candidate.sum - target;
+    const bestOver = best.sum - target;
+    // 如果候选未超过目标但达到了目标值（sum === target），优先选它
+    if (candidate.sum === target && best.sum !== target) {
+      best = candidate;
+      return;
+    }
+    // 优先选数字个数更少的
+    if (candidate.values.length < best.values.length) {
+      best = candidate;
+      return;
+    }
+    if (candidate.values.length === best.values.length && candidateOver < bestOver) {
+      best = candidate;
+      return;
+    }
+    // 如果个数相同、超过量相同，无需更新
+  }
+  function search(index, sum, chosen) {
+    // 如果总和已经达到或超过目标，记录候选
+    if (sum >= target) {
+      consider({ sum, values: [...chosen] });
+      // 不再继续往上加，因为再加只会更大
+      return;
+    }
+    if (index >= numbers.length) return;
     for (let i = index; i < numbers.length; i += 1) {
       search(i + 1, sum + numbers[i], [...chosen, numbers[i]]);
     }
@@ -53,7 +81,8 @@ form.addEventListener('submit', (event) => {
   if (!latestResult) { resultCaption.textContent = '没有找到符合条件的组合'; return; }
   resultCaption.textContent = '已找到最接近目标值的组合';
   total.textContent = formatNumber(latestResult.sum);
-  overage.textContent = `超过目标值 ${formatNumber(latestResult.sum - target)}`;
+  const diff = latestResult.sum - target;
+  overage.textContent = diff > 0 ? `超过目标值 ${formatNumber(diff)}` : '刚好达到目标值';
   count.textContent = `${latestResult.values.length} 个`;
   targetDisplay.textContent = formatNumber(target);
   inputCount.textContent = `${numbers.length} 个数字`;
@@ -62,6 +91,8 @@ form.addEventListener('submit', (event) => {
 
 copyButton.addEventListener('click', async () => {
   if (!latestResult) return;
-  const text = `最小超额总和：${formatNumber(latestResult.sum)}\n组合：${latestResult.values.map(formatNumber).join(' + ')}`;
+  const diff = latestResult.sum - target;
+  const overText = diff > 0 ? `超过目标值 ${formatNumber(diff)}` : '刚好达到目标值';
+  const text = `最小超额总和：${formatNumber(latestResult.sum)}（${overText}）\n组合：${latestResult.values.map(formatNumber).join(' + ')}`;
   try { await navigator.clipboard.writeText(text); copyButton.firstElementChild.textContent = '已复制'; setTimeout(() => { copyButton.firstElementChild.textContent = '复制结果'; }, 1600); } catch { error.textContent = '复制失败，请手动选择结果。'; }
 });
