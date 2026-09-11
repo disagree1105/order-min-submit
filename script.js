@@ -26,25 +26,22 @@ function findMinimumCombination(numbers, target) {
       best = candidate;
       return;
     }
-    // 优先选总和更接近目标（不超过或刚好达到目标）的组合
-    // 如果都超过目标，选超过更少的；如果一个刚好达到目标，优先选它
     const candidateOver = candidate.sum - target;
     const bestOver = best.sum - target;
-    // 如果候选未超过目标但达到了目标值（sum === target），优先选它
-    if (candidate.sum === target && best.sum !== target) {
+    // 第一优先级：超额量更小的优先（刚好达到目标值算超额量为 0，天然最小）
+    if (candidateOver < bestOver) {
       best = candidate;
       return;
     }
-    // 优先选数字个数更少的
+    if (candidateOver > bestOver) {
+      return;
+    }
+    // 第二优先级：超额量相同时，选数字个数更少的
     if (candidate.values.length < best.values.length) {
       best = candidate;
       return;
     }
-    if (candidate.values.length === best.values.length && candidateOver < bestOver) {
-      best = candidate;
-      return;
-    }
-    // 如果个数相同、超过量相同，无需更新
+    // 个数也相同，无需更新
   }
   function search(index, sum, chosen) {
     // 如果总和已经达到或超过目标，记录候选
