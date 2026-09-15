@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用教程 - 订单道具最少提交计算器</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .tutorial-shell { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+      .tutorial-shell h1 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.03em; margin: 0 0 10px; }
+      .tutorial-back { display: inline-block; color: var(--teal); font-size: 13px; font-weight: 700; text-decoration: none; margin-bottom: 24px; }
+      .tutorial-back:hover { text-decoration: underline; }
+      .tutorial-desc { margin: 0 0 32px; }
+      .tutorial-desc .desc-lead { font-size: 17px; font-weight: 700; color: var(--ink); margin: 0 0 20px; line-height: 1.6; }
+      .tutorial-desc h3 { font-size: 16px; font-weight: 700; color: var(--teal); margin: 24px 0 10px; }
+      .tutorial-desc p { font-size: 14px; line-height: 1.8; color: var(--muted); margin: 0 0 8px; }
+      .tutorial-desc .desc-notice { font-size: 14px; line-height: 1.8; color: var(--ink); margin: 0; }
+      .tutorial-desc ol { padding-left: 22px; margin: 8px 0 0; }
+      .tutorial-desc ol li { font-size: 14px; line-height: 1.8; color: var(--ink); margin-bottom: 6px; }
+      .tutorial-desc ol li strong { color: var(--teal); }
+      .tutorial-section-divider { border-top: 1px solid var(--line); margin: 32px 0; }
+      .tutorial-images { display: flex; flex-direction: column; gap: 24px; }
+      .tutorial-images img { width: 100%; border: 1px solid var(--line); border-radius: 8px; display: block; }
+    </style>
+  </head>
+  <body>
+    <div class="tutorial-shell">
+      <a href="index.html" class="tutorial-back">← 返回计算器</a>
+      <h1>使用教程</h1>
+      <p style="color: var(--muted); font-size: 14px; margin: 0 0 24px;">按照以下步骤操作即可快速上手</p>
+
+      <div class="tutorial-desc">
+        <p class="desc-lead">这是专为合成类游戏玩家打造的活动"凑单"省资源神器！</p>
+
+        <h3>它能帮你解决什么问题？</h3>
+        <p class="desc-notice">打活动任务时，最怕提交订单多花资源，或者少交了卡在关卡门槛。本工具能帮你在提交最少订单的前提下，精准凑满活动道具，实现"零浪费"过关！</p>
+
+        <h3>使用只需 3 步：</h3>
+        <ol>
+          <li><strong>填写订单：</strong>输入你手里现有的订单能给多少道具。</li>
+          <li><strong>输入目标：</strong>填入当前关卡需要的道具数量。</li>
+          <li><strong>一键计算：</strong>自动算出最佳提交组合，照着交就对了！</li>
+        </ol>
+      </div>
+
+      <div class="tutorial-section-divider"></div>
+      <div class="tutorial-images">
+        <img src="Tutorial/1.png" alt="教程步骤 1" />
+        <img src="Tutorial/2.png" alt="教程步骤 2" />
+        <img src="Tutorial/3.png" alt="教程步骤 3" />
+      </div>
+    </div>
+  </body>
+</html>

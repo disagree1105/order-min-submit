@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="寻找一组数字中总和刚好超过目标值的最小组合。" />
-    <title>订单道具最少提交计算器</title>
+    <title>合合订单计算小助手</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -12,13 +12,10 @@
   </head>
   <body>
     <main class="shell">
-      <header class="topbar">
-        <a class="brand" href="./" aria-label="超额最小组合计算器首页"><span class="brand-mark">+</span><span>MIN&nbsp;OVER</span></a>
-        <span class="version">组合搜索工具 · v1.0</span>
-      </header>
-
       <section class="intro">
-        <h1>订单道具最少提交计算器</h1>
+        <h1>合合订单计算小助手</h1>
+        <p class="subtitle">合成类游戏好帮手，不浪费一点资源！</p>
+        <div class="tutorial-bar"><span>不会使用？</span><a href="tutorial.html">查看教程</a></div>
       </section>
 
       <section class="workspace" aria-label="组合计算器">
@@ -29,11 +26,11 @@
           <p class="hint">使用逗号、空格或换行分隔</p>
           <label>目标进度</label>
           <div class="progress-inputs">
-            <div class="target-wrap"><input id="completed" name="completed" type="number" step="any" min="0" value="0" placeholder="0" /><span>已完成</span></div>
-            <div class="target-wrap"><input id="required" name="required" type="number" step="any" min="0" placeholder="例如：94" /><span>总需求</span></div>
+            <div class="target-wrap"><input id="completed" name="completed" type="number" step="any" min="0" value="0" placeholder="0" /><span class="target-label">已完成</span><button class="clear-btn" type="button" data-target="completed" aria-label="清空已完成" hidden>✕</button></div>
+            <div class="target-wrap"><input id="required" name="required" type="number" step="any" min="0" placeholder="例如：94" /><span class="target-label">总需求</span><button class="clear-btn" type="button" data-target="required" aria-label="清空总需求" hidden>✕</button></div>
           </div>
           <p class="hint progress-hint">实际计算目标 = 总需求 − 已完成</p>
-          <button class="primary-button" type="submit"><span>计算最小超额组合</span><span class="button-arrow">↗</span></button>
+          <button class="primary-button" type="submit"><span>计算</span><span class="button-arrow">↗</span></button>
           <p class="error" id="error" role="alert" aria-live="polite"></p>
         </form>
 
@@ -41,20 +38,29 @@
           <div class="panel-heading"><span class="step">02</span><div><h2>计算结果</h2><p id="result-caption">等待输入数据</p></div></div>
           <div id="result-state" class="result-state" hidden>
             <div class="result-total"><span>最小超额总和</span><strong id="total">—</strong><small id="overage">—</small></div>
+            <div id="submit-all" class="submit-all" hidden>
+              <p id="submit-all-text"></p>
+            </div>
             <div class="result-combo"><div class="combo-label">使用的数字 <span id="count">0 个</span></div><div id="combination" class="chips"></div></div>
             <div class="result-meta"><div><span>目标值</span><strong id="target-display">—</strong></div><div><span>参与计算</span><strong id="input-count">—</strong></div></div>
-            <button class="secondary-button" id="copy-button" type="button"><span>复制结果</span><span>⧉</span></button>
           </div>
         </section>
       </section>
 
-      <footer><span>支持正数、小数和相同数值</span><span>所有计算均在浏览器本地完成</span></footer>
+      <footer><span>支持正数、小数和相同数值</span></footer>
     </main>
     <style>
+      .subtitle { color: var(--muted); font-size: clamp(16px, 2vw, 20px); font-weight: 600; margin: 0 0 18px; }
+      .tutorial-bar { font-size: 18px; color: var(--muted); }
+      .tutorial-bar a { color: #1c6b5c; font-weight: 700; text-decoration: underline; font-size: 18px; }
+      .tutorial-bar a:hover { text-decoration: none; opacity: .8; }
       .intro h1 { font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.03em; }
       .progress-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
       .progress-inputs .target-wrap { margin-bottom: 8px; }
       .progress-hint { margin-top: 3px; margin-bottom: 23px; }
+      .submit-all[hidden] { display: none; }
+      .submit-all { display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px 0; border-bottom: 1px solid var(--line); }
+      .submit-all p { font-size: clamp(22px, 3vw, 32px); font-weight: 800; line-height: 1.5; color: var(--teal); letter-spacing: -0.02em; margin: 0; }
       @media (max-width: 420px) { .progress-inputs { grid-template-columns: 1fr; gap: 2px; } .intro h1 { font-size: 30px; } }
     </style>
     <script src="script.js"></script>

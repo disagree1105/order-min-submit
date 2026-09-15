@@ -5,13 +5,16 @@ const requiredInput = document.querySelector('#required');
 const error = document.querySelector('#error');
 const resultState = document.querySelector('#result-state');
 const resultCaption = document.querySelector('#result-caption');
+const resultPanel = document.querySelector('.result-panel');
 const total = document.querySelector('#total');
 const overage = document.querySelector('#overage');
 const combination = document.querySelector('#combination');
 const count = document.querySelector('#count');
 const targetDisplay = document.querySelector('#target-display');
 const inputCount = document.querySelector('#input-count');
-const copyButton = document.querySelector('#copy-button');
+const clearButtons = document.querySelectorAll('.clear-btn');
+const submitAll = document.querySelector('#submit-all');
+const submitAllText = document.querySelector('#submit-all-text');
 let latestResult = null;
 
 function parseNumbers(value) {
@@ -61,12 +64,39 @@ function findMinimumCombination(numbers, target) {
 
 function formatNumber(value) { return Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''); }
 
+// 已完成输入框获焦时，值为 0 则清空
+completedInput.addEventListener('focus', () => {
+  if (Number(completedInput.value) === 0) {
+    completedInput.value = '';
+  }
+});
+
+// 清空叉叉按钮逻辑
+function updateClearButton(input, btn) {
+  btn.hidden = input.value === '';
+}
+
+[...clearButtons].forEach((btn) => {
+  const input = document.querySelector(`#${btn.dataset.target}`);
+  // 初始化按钮可见性
+  updateClearButton(input, btn);
+  // 输入时更新按钮可见性
+  input.addEventListener('input', () => updateClearButton(input, btn));
+  // 点击叉叉清空输入
+  btn.addEventListener('click', () => {
+    input.value = '';
+    input.focus();
+    updateClearButton(input, btn);
+  });
+});
+
 form.addEventListener('submit', (event) => {
   event.preventDefault();
   error.textContent = '';
+  submitAll.hidden = true;
   const numbers = parseNumbers(numbersInput.value);
   const completed = completedInput.value === '' ? 0 : Number(completedInput.value);
-  const required = Number(requiredInput.value);
+  const required = requiredInput.value === '' ? 0 : Number(requiredInput.value);
   if (!numbers.length) { error.textContent = '请输入至少一个大于 0 的数字。'; return; }
   if (!Number.isFinite(completed) || completed < 0) { error.textContent = '已完成数量不能小于 0。'; return; }
   if (!Number.isFinite(required) || required < 0) { error.textContent = '请输入有效的总需求值。'; return; }
@@ -74,8 +104,27 @@ form.addEventListener('submit', (event) => {
   if (target < 0) { error.textContent = '已完成数量不能大于总需求。'; return; }
   if (numbers.length > 28) { error.textContent = '数字数量最多支持 28 个，请减少输入后再试。'; return; }
   latestResult = findMinimumCombination(numbers, target);
-  resultState.hidden = !latestResult;
-  if (!latestResult) { resultCaption.textContent = '没有找到符合条件的组合'; return; }
+  if (!latestResult) {
+    // 所有数字加起来都小于目标值，显示大字提示
+    resultState.hidden = false;
+    // 隐藏最小超额总和的具体数值，清空上一次的组合和元数据
+    total.textContent = '—';
+    overage.textContent = '—';
+    count.textContent = '0 个';
+    targetDisplay.textContent = '—';
+    inputCount.textContent = '—';
+    combination.innerHTML = '';
+    // 显示大字提示
+    const totalSum = numbers.reduce((a, b) => a + b, 0);
+    resultCaption.textContent = '所有订单总和不足，全部提交即可';
+    submitAllText.textContent = `所有订单累计总和：${formatNumber(totalSum)}，小于目标总和：${formatNumber(target)}，全部提交吧！`;
+    submitAll.hidden = false;
+    resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  // 找到结果，隐藏全部提交提示，显示计算结果
+  submitAll.hidden = true;
+  resultState.hidden = false;
   resultCaption.textContent = '已找到最接近目标值的组合';
   total.textContent = formatNumber(latestResult.sum);
   const diff = latestResult.sum - target;
@@ -84,12 +133,6 @@ form.addEventListener('submit', (event) => {
   targetDisplay.textContent = formatNumber(target);
   inputCount.textContent = `${numbers.length} 个数字`;
   combination.innerHTML = latestResult.values.map((value) => `<span class="chip">${formatNumber(value)}</span>`).join('');
-});
-
-copyButton.addEventListener('click', async () => {
-  if (!latestResult) return;
-  const diff = latestResult.sum - target;
-  const overText = diff > 0 ? `超过目标值 ${formatNumber(diff)}` : '刚好达到目标值';
-  const text = `最小超额总和：${formatNumber(latestResult.sum)}（${overText}）\n组合：${latestResult.values.map(formatNumber).join(' + ')}`;
-  try { await navigator.clipboard.writeText(text); copyButton.firstElementChild.textContent = '已复制'; setTimeout(() => { copyButton.firstElementChild.textContent = '复制结果'; }, 1600); } catch { error.textContent = '复制失败，请手动选择结果。'; }
+  // 点击计算后页面滚动到计算结果
+  resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
